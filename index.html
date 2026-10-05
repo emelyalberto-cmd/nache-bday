@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feliz Cumpleaños Nachely Victoria (Debías recibir esto anoche, pero VSCODE se rebeló)</title>
+    
+   
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+ 
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;700&family=Montserrat:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-pink: #fce4ec;
+            --dark-pink: #d81b60;
+            --gold: #d4af37;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #fff0f5 0%, #fce4ec 50%, #f8bbd0 100%);
+            font-family: 'Montserrat', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: #4a4a4a;
+        }
+
+        h1, h2, h3, .serif-font {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .script-font {
+            font-family: 'Dancing Script', cursive;
+        }
+
+   
+        .hearts-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .heart {
+            position: absolute;
+            bottom: -10vh;
+            opacity: 0.6;
+            animation: floatUp 15s linear infinite;
+        }
+
+        .heart svg {
+            fill: #ff80ab;
+            width: 20px;
+            height: 20px;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(0.8) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-110vh) scale(1.2) rotate(360deg); opacity: 0; }
+        }
+
+       
+        .tree-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            aspect-ratio: 4/5;
+            z-index: 10;
+        }
+
+        .tree-svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0px 10px 15px rgba(0,0,0,0.1));
+        }
+
+    
+        .envelope {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            transform: translate(-50%, -50%);
+            cursor: not-allowed;
+            opacity: 0.5;
+            transition: all 0.4s ease;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .envelope svg {
+            width: 100%;
+            height: 100%;
+            fill: #fff;
+            stroke: var(--dark-pink);
+            stroke-width: 1.5;
+            transition: all 0.3s ease;
+        }
+
+        .envelope .env-num {
+            position: absolute;
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: var(--dark-pink);
+            pointer-events: none;
+            font-family: 'Montserrat', sans-serif;
+            margin-top: 2px;
+        }
+
+   
+        .envelope.active {
+            cursor: pointer;
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1.2);
+            z-index: 20;
+        }
+
+        .envelope.active svg {
+            fill: #ffebee;
+            stroke: var(--dark-pink);
+        }
+
+        .envelope.active::after {
+            content: '';
+            position: absolute;
+            top: -5px; left: -5px; right: -5px; bottom: -5px;
+            border-radius: 50%;
+            border: 2px solid var(--dark-pink);
+            animation: pulse 1.5s infinite;
+        }
+
+        .envelope.opened {
+            opacity: 0.8;
+            cursor: pointer;
+        }
+        
+        .envelope.opened svg {
+            fill: #f8bbd0;
+            stroke: #ad1457;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+
+ 
+        .flower {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            transform: translate(-50%, -50%) scale(0);
+            z-index: 15;
+            pointer-events: none;
+            animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes popIn {
+            to { transform: translate(-50%, -50%) scale(1) rotate(15deg); }
+        }
+
+    
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(8px);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: #ffffff;
+            width: 90%;
+            max-width: 550px;
+            max-height: 85vh;
+            overflow-y: auto;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 25px 50px -12px rgba(216, 27, 96, 0.25);
+            transform: translateY(30px) scale(0.95);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            border: 1px solid #fce4ec;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateY(0) scale(1);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #f8bbd0;
+            color: #d81b60;
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .close-btn:hover {
+            background: #f48fb1;
+            transform: rotate(90deg);
+        }
+
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        .instruction-toast {
+            animation: slideDown 0.5s ease forwards;
+        }
+        
+        @keyframes slideDown {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+
+        .neruda-overlay {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1.2s ease-in-out;
+        }
+
+        .neruda-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .neruda-overlay.show #neruda-content {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="relative">
+
+    <div class="hearts-bg" id="hearts-container"></div>
+
+
+    <div class="fixed top-4 left-0 right-0 z-50 flex justify-center pointer-events-none instruction-toast" id="guide-message">
+        <div class="bg-white/80 backdrop-blur-md px-6 py-3 rounded-full shadow-lg border border-pink-100 flex items-center gap-3">
+            <svg class="w-5 h-5 text-pink-500 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z" />
+            </svg>
+            <span class="text-sm md:text-base font-medium text-gray-700" id="instruction-text">Abre la carta #1 para comenzar a florecer</span>
+        </div>
+    </div>
+
+    <main class="relative z-10 pt-20 pb-12 px-4 flex flex-col items-center">
+        <header class="text-center mb-6">
+            <h1 class="text-4xl md:text-6xl text-pink-700 mb-2 drop-shadow-sm font-bold">Feliz Cumpleaños</h1>
+            <h2 class="text-3xl md:text-5xl script-font text-pink-600 mb-4">Nachely Victoria</h2>
+            <p class="text-gray-600 max-w-md mx-auto text-sm md:text-base leading-relaxed">
+                Hoy celebras 24 años de iluminar el mundo. Cada carta en este árbol guarda un pedacito de lo que eres para mí. Ábrelas una por una, y observa cómo florece la vida a tu paso.
+            </p>
+        </header>
+
+
+        <div class="tree-wrapper" id="tree-container">
+      
+            <svg class="tree-svg" viewBox="0 0 400 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M200 480 C180 400, 190 300, 200 250" stroke="#5D4037" stroke-width="20" stroke-linecap="round"/>
+                
+
+                <path d="M200 350 C150 320, 80 280, 50 200" stroke="#6D4C41" stroke-width="12" stroke-linecap="round"/>
+                <path d="M200 320 C250 280, 320 250, 350 180" stroke="#6D4C41" stroke-width="14" stroke-linecap="round"/>
+                
+                <path d="M140 310 C100 270, 70 220, 90 150" stroke="#795548" stroke-width="8" stroke-linecap="round"/>
+                <path d="M90 250 C50 230, 30 180, 20 120" stroke="#8D6E63" stroke-width="6" stroke-linecap="round"/>
+                <path d="M120 200 C100 160, 110 100, 150 70" stroke="#8D6E63" stroke-width="5" stroke-linecap="round"/>
+                <path d="M200 250 C180 200, 160 140, 180 80" stroke="#795548" stroke-width="8" stroke-linecap="round"/>
+                
+                <path d="M250 290 C290 240, 320 190, 310 120" stroke="#795548" stroke-width="8" stroke-linecap="round"/>
+                <path d="M300 230 C340 210, 370 160, 380 90" stroke="#8D6E63" stroke-width="6" stroke-linecap="round"/>
+                <path d="M280 170 C270 130, 290 80, 250 40" stroke="#8D6E63" stroke-width="5" stroke-linecap="round"/>
+                <path d="M200 250 C220 200, 240 140, 220 70" stroke="#795548" stroke-width="7" stroke-linecap="round"/>
+                
+                <path d="M70 180 C50 150, 60 120, 80 100" stroke="#A1887F" stroke-width="3" stroke-linecap="round"/>
+                <path d="M320 160 C340 130, 330 100, 310 80" stroke="#A1887F" stroke-width="3" stroke-linecap="round"/>
+                <path d="M160 120 C140 100, 130 70, 110 60" stroke="#A1887F" stroke-width="3" stroke-linecap="round"/>
+                <path d="M240 130 C260 100, 270 70, 290 60" stroke="#A1887F" stroke-width="3" stroke-linecap="round"/>
+                <path d="M190 150 C195 120, 205 90, 200 50" stroke="#A1887F" stroke-width="4" stroke-linecap="round"/>
+            </svg>
+            
+        </div>
+    </main>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="letter-modal">
+        <div class="modal-content scrollbar-hide">
+            <button class="close-btn" onclick="closeLetter()">×</button>
+            <div class="text-center mb-6">
+                <span class="inline-block px-3 py-1 bg-pink-100 text-pink-600 rounded-full text-xs font-bold tracking-wider mb-3" id="modal-number">CARTA #1</span>
+                
+                <h3 class="text-3xl md:text-4xl script-font text-pink-600 mb-2" id="modal-adjective">Radiante</h3>
+                <div class="w-16 h-0.5 bg-gold mx-auto my-4 opacity-50"></div>
+                
+                <blockquote class="serif-font italic text-gray-600 text-lg md:text-xl px-4 relative">
+                    <span class="text-4xl text-pink-200 absolute -top-4 -left-2">"</span>
+                    <span id="modal-quote">Quote goes here</span>
+                    <span class="text-4xl text-pink-200 absolute -bottom-6 -right-2">"</span>
+                </blockquote>
+                <p class="text-sm font-semibold text-gray-400 mt-4 text-right pr-4">— <span id="modal-author">Autor</span></p>
+            </div>
+            
+            <div class="text-gray-700 leading-relaxed space-y-4 font-light text-sm md:text-base border-t border-pink-50 pt-6" id="modal-text">
+                <!-- Text goes here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Final Quote Overlay -->
+    <div id="neruda-overlay" class="neruda-overlay fixed inset-0 z-[200] bg-white/95 backdrop-blur-md flex flex-col items-center justify-center">
+        <div class="max-w-3xl px-8 text-center transform translate-y-8 transition-all duration-1000 delay-300" id="neruda-content">
+            <p class="serif-font italic text-3xl md:text-5xl text-pink-700 leading-tight mb-8">
+                "Podrán cortar todas las flores, pero no podrán detener la primavera."
+            </p>
+            <p class="text-gray-500 font-medium tracking-widest text-lg md:text-xl">— Pablo Neruda</p>
+            
+            <button onclick="document.getElementById('neruda-overlay').classList.remove('show')" class="mt-16 px-8 py-3 border border-pink-200 text-pink-600 rounded-full hover:bg-pink-50 transition-colors text-sm font-bold tracking-widest uppercase">
+                Ver mi árbol
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // 24 Envelope positions on the tree (Percentages relative to tree container)
+        const envelopePositions = [
+            { top: '80%', left: '45%' }, // 1 (Bottom, easy to reach)
+            { top: '72%', left: '25%' }, // 2
+            { top: '65%', left: '60%' }, // 3
+            { top: '58%', left: '15%' }, // 4
+            { top: '50%', left: '75%' }, // 5
+            { top: '48%', left: '35%' }, // 6
+            { top: '42%', left: '55%' }, // 7
+            { top: '35%', left: '20%' }, // 8
+            { top: '32%', left: '80%' }, // 9
+            { top: '30%', left: '45%' }, // 10
+            { top: '25%', left: '30%' }, // 11
+            { top: '22%', left: '65%' }, // 12
+            { top: '18%', left: '12%' }, // 13
+            { top: '15%', left: '85%' }, // 14
+            { top: '15%', left: '48%' }, // 15
+            { top: '12%', left: '35%' }, // 16
+            { top: '10%', left: '60%' }, // 17
+            { top: '8%', left: '25%' },  // 18
+            { top: '6%', left: '75%' },  // 19
+            { top: '5%', left: '50%' },  // 20
+            { top: '48%', left: '85%' }, // 21
+            { top: '38%', left: '10%' }, // 22
+            { top: '28%', left: '90%' }, // 23
+            { top: '0%', left: '50%' }   // 24 (The top star/crown position)
+        ];
+
+        const letters = [
+            {
+                quote: "Y debo decir que confío plenamente en la casualidad de haberte conocido.",
+                author: "Julio Cortázar",
+                adjective: "Destinada",
+                text: "Nachely, hoy cumples 24 años, y al mirar hacia atrás, no puedo evitar sentir que nuestro encuentro no fue un accidente. Hay almas que están destinadas a cruzarse para enseñarse mutuamente cómo brillar con más fuerza. Desde el primer día, tu presencia fue un refugio constante, un recordatorio de que la vida es más dulce cuando se comparte con alguien que entiende tu silencio tanto como tu risa."
+            },
+            {
+                quote: "Me gusta la gente capaz de entender que el mayor error del ser humano, es intentar sacarse de la cabeza aquello que no sale del corazón.",
+                author: "Mario Benedetti",
+                adjective: "Auténtica",
+                text: "Si algo admiro profundamente de ti, es la honestidad con la que vives. En un mundo que a menudo nos pide usar máscaras, tú siempre eliges la valentía de ser tú misma, con tus emociones a flor de piel, con tu corazón gigante latiendo al descubierto. No dejes nunca que el ruido exterior silencie esa autenticidad; es tu mayor superpoder."
+            },
+            {
+                quote: "No hay barrera, cerradura ni cerrojo que puedas imponer a la libertad de mi mente.",
+                author: "Virginia Woolf",
+                adjective: "Libre",
+                text: "A tus 24, te veo expandir tus alas con una gracia que me deja sin palabras. Tu mente es un universo lleno de ideas brillantes, sueños audaces y una curiosidad inagotable. Celebro esa libertad tuya, esa rebeldía hermosa que te impulsa a cuestionarlo todo y a buscar siempre tu propio camino, sin conformarte con lo que simplemente 'debe ser'."
+            },
+            {
+                quote: "El secreto es no correr detrás de las mariposas... es cuidar el jardín para que ellas vengan hacia ti.",
+                author: "Mario Quintana",
+                adjective: "Paciente",
+                text: "Este año he sido testigo de tu crecimiento interior, de cómo has aprendido a cultivar tu propio jardín. Has entendido que las mejores cosas de la vida no se fuerzan, sino que florecen cuando estamos listos para recibirlas. Nachely, eres un jardín hermoso, y mereces todas las mariposas que el destino tiene reservadas para ti hoy y siempre."
+            },
+            {
+                quote: "Solo tú puedes decidir qué hacer con el tiempo que se te ha dado.",
+                author: "J.R.R. Tolkien",
+                adjective: "Valiente",
+                text: "Veinticuatro años es una edad mágica, un puente entre la juventud vertiginosa y la adultez profunda. Cada decisión que tomas, cada paso hacia adelante, incluso aquellos dados con miedo, reflejan una valentía que me inspira a diario. Tienes en tus manos el lienzo de tu vida; pinta con los colores más fuertes, porque el tiempo es tuyo."
+            },
+            {
+                quote: "No es verdad que la gente pare de perseguir sus sueños porque se hacen viejos, se hacen viejos porque paran de perseguir sus sueños.",
+                author: "Gabriel García Márquez",
+                adjective: "Soñadora",
+                text: "Tu capacidad para soñar es el motor que ilumina tus ojos. Cuando hablas de tus metas, de todo lo que deseas lograr, el mundo entero parece detenerse a escuchar. A los 24, te pido que protejas esos sueños ferozmente. Que nadie te convenza jamás de que pides demasiado. Sigue soñando en grande, porque tienes todo para alcanzar las estrellas."
+            },
+            {
+                quote: "El amor no mira con los ojos, sino con el alma.",
+                author: "William Shakespeare",
+                adjective: "Empática",
+                text: "Hay una calidez en tu mirada que abraza incluso antes de que hables. Tu empatía, esa habilidad casi mágica para sentir el dolor y la alegría ajena como propios, es un regalo raro en este mundo. Gracias por ser siempre un hombro donde descansar, por saber escuchar con el alma y por amar con una intensidad que transforma todo lo que toca."
+            },
+            {
+                quote: "Soy una hoja al viento, pero también soy el viento.",
+                author: "Alejandra Pizarnik",
+                adjective: "Fuerte",
+                text: "He visto tus tormentas, Nachely. He visto cómo la vida a veces intenta doblarte, pero siempre, siempre, te levantas con más fuerza. A veces te sientes vulnerable, como una hoja al viento, pero olvidas que dentro de ti reside el poder mismo del huracán. Tu resiliencia me maravilla. Eres muchísimo más fuerte de lo que te permites creer."
+            },
+            {
+                quote: "Es una locura odiar a todas las rosas porque una te pinchó.",
+                author: "Antoine de Saint-Exupéry",
+                adjective: "Esperanzadora",
+                text: "A pesar de las heridas, siempre eliges seguir creyendo en la belleza de las cosas. Tienes un corazón que se niega a endurecerse, que prefiere sanar y volver a entregarse antes que cerrarse por miedo. Esa esperanza inquebrantable tuya es la que hace florecer cualquier lugar donde plantas tus pies. Nunca pierdas esa dulzura."
+            },
+            {
+                quote: "Andábamos sin buscarnos, pero sabiendo que andábamos para encontrarnos.",
+                author: "Julio Cortázar",
+                adjective: "Compañera",
+                text: "A veces pienso en la inmensa suerte de tenerte en mi vida como amiga. Eres esa compañera de aventuras y de madrugadas, la que hace que lo ordinario se vuelva extraordinario. En estos 24 años que celebras, quiero celebrar también nuestra amistad, el refugio seguro que hemos construido y todas las risas que aún nos quedan por compartir."
+            },
+            {
+                quote: "El alma que hablar puede con los ojos, también puede besar con la mirada.",
+                author: "Gustavo Adolfo Bécquer",
+                adjective: "Transparente",
+                text: "No necesitas decir mucho para que yo entienda cómo te sientes. Tienes una luz tan inmensa y transparente que se desborda por tus ojos. En cada mirada expresas un océano de sentimientos. Amo esa pureza en ti, esa incapacidad de esconder lo que te apasiona, lo que te duele o lo que te hace inmensamente feliz."
+            },
+            {
+                quote: "Pies, ¿para qué los quiero, si tengo alas para volar?",
+                author: "Frida Kahlo",
+                adjective: "Libre",
+                text: "Tu espíritu no conoce de jaulas. Eres salvaje en el mejor sentido de la palabra, indomable frente a la mediocridad. A los 24, te invito a seguir desplegando esas alas. Vuela lejos de todo lo que no te aporte paz, vuela alto hacia todo aquello que encienda tu alma. El cielo no es el límite, es solo el comienzo para alguien como tú."
+            },
+            {
+                quote: "De qué sirve la vida, si no es para darse.",
+                author: "Rabindranath Tagore",
+                adjective: "Generosa",
+                text: "Tu corazón siempre está dispuesto a dar. Tienes esa capacidad hermosa de entregarte a los demás, de hacer sentir especiales a quienes te rodean. Hoy, en tu cumpleaños, quiero que te permitas recibir. Que abraces todo el amor, la admiración y la luz que nosotros, los que te amamos, queremos devolverte. Te mereces el mundo entero, Nachely."
+            },
+            {
+                quote: "Que tu fuego no se apague nunca, ni siquiera por las tormentas más fuertes.",
+                author: "Anónimo",
+                adjective: "Apasionada",
+                text: "Cuando algo te importa, Nachely, ardes con una intensidad que ilumina la noche entera. Esa pasión con la que defiendes tus ideas, con la que amas a los tuyos y con la que persigues tus intereses, es lo que te hace inolvidable. Mantén viva esa chispa a tus 24; es el fuego que te guiará en las noches más oscuras."
+            },
+            {
+                quote: "La belleza perece en la vida, pero es inmortal en el arte.",
+                author: "Leonardo da Vinci",
+                adjective: "Creadora",
+                text: "Hay mucho arte en tu forma de vivir. En cómo adornas los espacios, en cómo compones tus días, en la armonía que buscas constantemente. Eres una creadora de momentos hermosos. Hoy celebro tu sensibilidad artística, tu buen gusto por la vida y la magia que dejas impregnada en todo lo que tus manos tocan."
+            },
+            {
+                quote: "No te rindas que la vida es eso, continuar el viaje, perseguir tus sueños...",
+                author: "Mario Benedetti",
+                adjective: "Perseverante",
+                text: "He sido testigo de tu esfuerzo, de las noches de cansancio y de las mañanas de dudas. Y también he visto cómo, a pesar de todo, das un paso más. Tu perseverancia es un acto de amor propio enorme. A los 24, quiero recordarte que el viaje recién empieza, y que cada paso que has dado te ha preparado exactamente para este hermoso momento."
+            },
+            {
+                quote: "Todo lo que puedes imaginar es real.",
+                author: "Pablo Picasso",
+                adjective: "Visionaria",
+                text: "Donde otros ven obstáculos, tú ves un lienzo en blanco. Tienes la habilidad de imaginar un mundo mejor, un futuro más brillante, y la determinación para caminar hacia él. Nunca dejes que la dureza de la realidad empañe tu visión. Tu imaginación es el mapa que te llevará a los lugares más extraordinarios de tu propia vida."
+            },
+            {
+                quote: "La risa es el sol que ahuyenta el invierno del rostro humano.",
+                author: "Victor Hugo",
+                adjective: "Luminosa",
+                text: "Si tuviera que elegir un sonido favorito en el mundo, sería tu risa. Es contagiosa, es pura, y tiene el poder absoluto de cambiar el clima de cualquier habitación. Cuando sonríes, Nachely, todo parece estar bien. Gracias por iluminar mis inviernos con la primavera constante que llevas en tu sonrisa."
+            },
+            {
+                quote: "Las cicatrices son la prueba de que el pasado fue real, pero también de que hemos sanado.",
+                author: "Anónimo",
+                adjective: "Transformadora",
+                text: "Tus 24 años son la suma de alegrías inmensas y lecciones profundas. Has sabido transformar el dolor en sabiduría, las lágrimas en crecimiento. Eres como la alquimista de tu propia alma. Admiro profundamente a la mujer en la que te has convertido, forjada en la ternura pero con la resistencia del diamante."
+            },
+            {
+                quote: "En la profundidad del invierno, finalmente aprendí que dentro de mí había un verano invencible.",
+                author: "Albert Camus",
+                adjective: "Invencible",
+                text: "Quiero que guardes esta frase en tu corazón para cuando sientas frío. Tienes dentro de ti un verano eterno, una fuerza que nada ni nadie puede apagar. Eres dueña de una fortaleza interior que me deja sin aliento. Hoy celebramos no solo tu nacimiento, sino tu renacimiento constante."
+            },
+            {
+                quote: "Aquel que tiene un porqué para vivir se puede enfrentar a todos los 'cómos'.",
+                author: "Friedrich Nietzsche",
+                adjective: "Determinada",
+                text: "Tu brújula interna está cada vez más clara. Sabes lo que vales, empiezas a tener claro hacia dónde vas, y esa determinación es fascinante. A tus 24, aférrate a tus 'porqués'. Son ellos los que te darán la energía para superar cualquier obstáculo. Creo en ti con cada célula de mi cuerpo."
+            },
+            {
+                quote: "La amistad duplica las alegrías y divide las angustias por la mitad.",
+                author: "Francis Bacon",
+                adjective: "Incondicional",
+                text: "Llegando al final de estas cartas, solo puedo decir: Gracias. Gracias por ser mi lugar seguro. Gracias por sostener mi mano cuando el mundo temblaba y por brindar conmigo cuando el sol salía. Eres una amiga incondicional, un tesoro que prometo cuidar y valorar todos los días de mi vida."
+            },
+            {
+                quote: "Estar contigo o no estar contigo es la medida de mi tiempo.",
+                author: "Jorge Luis Borges",
+                adjective: "Inolvidable",
+                text: "Tu impacto en mi vida y en la de quienes te rodean es inmedible. Dejas huella en cada conversación, en cada abrazo. Nachely, eres de esas personas que uno agradece a la vida haber cruzado. Hoy celebramos 24 años de tu magia en este planeta. Que la vida te devuelva multiplicado cada instante de felicidad que nos regalas."
+            },
+            {
+                quote: "Y al final, el amor que recibes es igual al amor que das.",
+                author: "Paul McCartney",
+                adjective: "Amada",
+                text: "La última carta. El centro del árbol. Nachely Victoria, a tus 24 años estás rodeada de un bosque entero de afecto. Si algo debes recordar hoy y siempre, es que eres profunda, inmensa y verdaderamente amada. Todo lo que has sembrado con tu bondad está floreciendo hoy. ¡Feliz cumpleaños, mi querida amiga! Que la vida te sonría siempre."
+            }
+        ];
+
+        // --- App State & DOM Refs ---
+        let currentIndex = 0;
+        const total = 24;
+        
+        const els = {
+            tree: document.getElementById('tree-container'),
+            modal: document.getElementById('letter-modal'),
+            guide: document.getElementById('guide-message'),
+            instruction: document.getElementById('instruction-text'),
+            nerudaOverlay: document.getElementById('neruda-overlay')
+        };
+        
+        const palette = ['#ff80ab', '#f48fb1', '#f06292', '#e91e63', '#fce4ec', '#fff'];
+
+        // --- Core Functions ---
+        const init = () => {
+            spawnBackgroundHearts();
+            mountEnvelopes();
+            updateUI();
+        };
+
+        const mountEnvelopes = () => {
+            envelopePositions.forEach((pos, i) => {
+                const el = document.createElement('div');
+                el.className = 'envelope';
+                el.id = `env-${i}`;
+                
+                // Inject positioning
+                Object.assign(el.style, { top: pos.top, left: pos.left });
+                
+                el.innerHTML = `
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4 7.00005L10.2 11.65C11.2667 12.45 12.7333 12.45 13.8 11.65L20 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <rect x="3" y="5" width="18" height="14" rx="2" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    <span class="env-num">${i + 1}</span>
+                `;
+
+                el.addEventListener('click', () => handleOpen(i));
+                els.tree.appendChild(el);
+            });
+            refreshState();
+        };
+
+        const refreshState = () => {
+            for (let i = 0; i < total; i++) {
+                const env = document.getElementById(`env-${i}`);
+                if (i < currentIndex) {
+                    env.className = 'envelope opened';
+                    env.innerHTML = `
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M4 19V9L12 3L20 9V19H4Z" stroke-width="2" stroke-linejoin="round"/>
+                            <path d="M4 9L12 15L20 9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    `;
+                } else if (i === currentIndex) {
+                    env.className = 'envelope active';
+                } else {
+                    env.className = 'envelope';
+                }
+            }
+        };
+
+        const updateUI = () => {
+            if (currentIndex < total) {
+                els.instruction.innerHTML = `Es momento de abrir la carta <b class="ml-1">#${currentIndex + 1}</b>`;
+                els.guide.classList.remove('hidden');
+            } else {
+                els.guide.classList.add('hidden');
+            }
+        };
+
+        const handleOpen = (idx) => {
+            if (idx !== currentIndex) return; // Prevent out-of-order opening
+
+            const data = letters[idx];
+            document.getElementById('modal-number').innerText = `CARTA #${idx + 1}`;
+            document.getElementById('modal-adjective').innerText = data.adjective;
+            document.getElementById('modal-quote').innerText = data.quote;
+            document.getElementById('modal-author').innerText = data.author;
+            document.getElementById('modal-text').innerText = data.text;
+
+            els.modal.classList.add('active');
+        };
+
+        // Global binding for HTML inline onclick
+        window.closeLetter = () => {
+            els.modal.classList.remove('active');
+            
+            setTimeout(() => {
+                generateBlooms(Math.floor(Math.random() * 3) + 3);
+                currentIndex++;
+                refreshState();
+                updateUI();
+
+                // Trigger finale sequence if finished
+                if (currentIndex === total) {
+                    triggerFinale();
+                }
+            }, 400);
+        };
+
+        const generateBlooms = (count) => {
+            for (let i = 0; i < count; i++) {
+                const flower = document.createElement('div');
+                flower.className = 'flower';
+                
+                // Keep bounding box roughly on the branches
+                const t = 10 + Math.random() * 70; 
+                const l = 10 + Math.random() * 80;
+                
+                Object.assign(flower.style, {
+                    top: `${t}%`,
+                    left: `${l}%`,
+                    animationDelay: `${Math.random() * 0.4}s`
+                });
+
+                const fill = palette[Math.floor(Math.random() * palette.length)];
+                
+                flower.innerHTML = `
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="50" cy="25" r="20" fill="${fill}" opacity="0.9"/>
+                        <circle cx="50" cy="75" r="20" fill="${fill}" opacity="0.9"/>
+                        <circle cx="25" cy="50" r="20" fill="${fill}" opacity="0.9"/>
+                        <circle cx="75" cy="50" r="20" fill="${fill}" opacity="0.9"/>
+                        <circle cx="50" cy="50" r="15" fill="#fbc02d" />
+                    </svg>
+                `;
+                
+                els.tree.appendChild(flower);
+            }
+        };
+
+        const triggerFinale = () => {
+            // Step 1: Massive bloom explosion on the tree
+            setTimeout(() => {
+                generateBlooms(50);
+            }, 500);
+
+            // Step 2: Show Neruda quote overlay
+            setTimeout(() => {
+                els.nerudaOverlay.classList.add('show');
+            }, 3000);
+        };
+
+        const spawnBackgroundHearts = () => {
+            const container = document.getElementById('hearts-container');
+            const qty = 15;
+
+            for (let i = 0; i < qty; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                
+                const dur = 10 + Math.random() * 15;
+                const del = Math.random() * 15;
+                const scale = 0.5 + Math.random();
+                
+                Object.assign(heart.style, {
+                    left: `${Math.random() * 100}vw`,
+                    animationDuration: `${dur}s`,
+                    animationDelay: `-${del}s`,
+                    transform: `scale(${scale})`
+                });
+
+                heart.innerHTML = `
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                    </svg>
+                `;
+                container.appendChild(heart);
+            }
+        };
+
+        // Bootstrap app
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
